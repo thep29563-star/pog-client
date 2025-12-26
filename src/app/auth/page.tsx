@@ -1,4 +1,6 @@
-const AuthPage = ()=> {
-  return <div>User Page</div>;
-}
+import AuthServer from "@/src/components/Auth/AuthServer";
+
+const AuthPage = () => {
+  return <AuthServer />;
+};
 export default AuthPage;

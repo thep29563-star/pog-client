@@ -1,7 +1,5 @@
-const Home = () => {
+import { HomeSever } from "@/src/components/Home/HomeSever";
 
-return (
-<h1>Home</h1>
-);
+export default function Home() {
+  return <HomeSever />;
 }
-export default Home;

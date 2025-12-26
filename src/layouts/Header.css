@@ -1,0 +1,124 @@
+.header {
+  position: sticky;
+  top: 0;
+  z-index: 1000;
+}
+
+.navbar {
+  height: 70px;
+}
+
+.navbar-brand {
+  display: flex;
+  align-items: center;
+  text-decoration: none;
+  padding: 0;
+  margin-right: 1rem;
+  background: transparent !important;
+}
+
+.logo-image {
+  height: auto;
+  width: auto;
+  max-height: 50px;
+  object-fit: contain;
+  background: transparent !important;
+  background-color: transparent !important;
+  mix-blend-mode: normal;
+}
+
+/* Đảm bảo Next.js Image wrapper cũng transparent */
+.navbar-brand > span {
+  background: transparent !important;
+  display: inline-block;
+}
+
+.nav-link {
+  font-weight: 500;
+  margin-right: 12px;
+}
+
+.nav-link:hover {
+  color: #0d6efd !important;
+}
+
+.btn-outline-primary {
+  border-radius: 20px;
+  padding: 6px 20px;
+}
+
+/* Mobile Menu - Slide từ trên xuống */
+@media (max-width: 991.98px) {
+  .navbar-collapse {
+    position: absolute;
+    top: 100%;
+    left: 0;
+    right: 0;
+    background: #ffffff;
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+    max-height: 0;
+    overflow: hidden;
+    transition: max-height 0.3s ease-out, padding 0.3s ease-out;
+    padding: 0 1rem;
+  }
+
+  .navbar-collapse.show {
+    max-height: 500px;
+    padding: 1.5rem 1rem;
+    transition: max-height 0.4s ease-in, padding 0.3s ease-in;
+  }
+
+  .navbar-nav {
+    flex-direction: column;
+    width: 100%;
+    margin-bottom: 1rem;
+  }
+
+  .nav-item {
+    width: 100%;
+    border-bottom: 1px solid #f0f0f0;
+  }
+
+  .nav-item:last-child {
+    border-bottom: none;
+  }
+
+  .nav-link {
+    padding: 1rem 0;
+    margin-right: 0;
+    display: block;
+    width: 100%;
+  }
+
+  .navbar-actions,
+  .btn-outline-primary {
+    width: 100%;
+    margin-top: 0.5rem;
+    text-align: center;
+    display: block;
+  }
+
+  .btn-outline-primary {
+    padding: 0.75rem 20px;
+  }
+
+  /* Hamburger icon animation */
+  .navbar-toggler.active .navbar-toggler-icon {
+    transform: rotate(90deg);
+    transition: transform 0.3s ease;
+  }
+
+  .navbar-toggler-icon {
+    transition: transform 0.3s ease;
+  }
+}
+
+/* Desktop - Giữ nguyên Bootstrap behavior */
+@media (min-width: 992px) {
+  .navbar-collapse {
+    display: flex !important;
+    flex-basis: auto;
+    flex-grow: 1;
+    align-items: center;
+  }
+}
