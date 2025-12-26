@@ -352,3 +352,66 @@ html {
     padding: 1.25rem;
   }
 }
+/* Container bọc ngoài để căn vị trí nút bấm */
+.slider-wrapper {
+  position: relative;
+  width: 100%;
+  /*padding: 0 20px; /* Chừa chỗ cho nút bấm */
+}
+
+/* Thanh trượt chính */
+.products-slider {
+  display: flex; /* Xếp hàng ngang */
+  gap: 20px;     /* Khoảng cách giữa các card */
+  overflow-x: auto; /* Cho phép cuộn ngang */
+  scroll-behavior: smooth; /* Cuộn mượt */
+  padding-bottom: 20px; /* Chừa chỗ cho thanh cuộn (nếu có) */
+  
+  /* Ẩn thanh cuộn mặc định đi cho đẹp */
+  scrollbar-width: none; /* Firefox */
+  -ms-overflow-style: none; /* IE/Edge */
+}
+
+/* Ẩn thanh cuộn trên Chrome/Safari */
+.products-slider::-webkit-scrollbar {
+  display: none;
+}
+
+/* Định kích thước cứng cho mỗi item để slider đều nhau */
+.slider-item {
+  min-width: 300px; /* Chiều rộng tối thiểu mỗi card */
+  max-width: 300px;
+  flex-shrink: 0; /* Không cho phép co nhỏ lại */
+}
+
+/* Style cho 2 nút bấm */
+.nav-btn {
+  position: absolute;
+  top: 50%;
+  transform: translateY(-50%);
+  z-index: 10;
+  background: white;
+  border: 1px solid #ddd;
+  border-radius: 50%;
+  width: 40px;
+  height: 40px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  box-shadow: 0 4px 6px rgba(0,0,0,0.1);
+  transition: all 0.3s ease;
+}
+
+.nav-btn:hover {
+  background: #f0f0f0;
+  transform: translateY(-50%) scale(1.1);
+}
+
+.prev-btn {
+  left: -10px; /* Đẩy sang trái */
+}
+
+.next-btn {
+  right: -10px; /* Đẩy sang phải */
+}

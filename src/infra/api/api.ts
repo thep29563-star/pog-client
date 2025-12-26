@@ -38,6 +38,5 @@ export async function fetcher(
     const error = await res.text();
     throw new Error(error || "Fetch failed");
   }
-
   return res.json();
 }

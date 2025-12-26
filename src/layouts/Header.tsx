@@ -163,8 +163,6 @@ export const Header = () => {
                 onClick={closeMenu}
               >
                 Đăng nhập
-                <p>avata</p>
-
               </Link>
             
             {/* )} */}

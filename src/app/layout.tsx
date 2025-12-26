@@ -19,12 +19,7 @@ export interface UserDto {
   email: string;
   // Thêm các trường khác nếu cần
 }
-type AuthContextType = {
-  userDto: UserDto | null;
-  login: ( userDto: UserDto) => void;
-  logout: () => void;
-};
-const AuthContext = createContext<AuthContextType | null>(null);
+
 
 export default function RootLayout({
   children,

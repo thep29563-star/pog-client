@@ -2,9 +2,12 @@
 
 import "./Home.css";
 import Link from "next/link";
-import { useEffect } from "react";
+import { useEffect, useRef } from "react";
+import CardUser, { UserData } from "./components/CardUser";
+import { ChevronLeft, ChevronRight } from "react-bootstrap-icons";
+export const HomeClient = ({userData}:{userData:UserData[]}) => {
+  const sliderRef = useRef<HTMLDivElement>(null);
 
-export const HomeClient = () => {
   useEffect(() => {
     // Xử lý scroll đến section khi có hash trong URL
     const hash = window.location.hash;
@@ -25,7 +28,34 @@ export const HomeClient = () => {
       }, 100);
     }
   }, []);
-
+  const safeUserData = Array.isArray(userData) ? userData : [];
+  const hasData = safeUserData.length > 0;
+  const scrollRight = () => {
+    const el = sliderRef.current;
+    if (!el) return;
+  
+    const maxScroll = el.scrollWidth - el.clientWidth;
+  
+    if (el.scrollLeft >= maxScroll - 5) {
+      el.scrollTo({ left: 0, behavior: "smooth" });
+    } else {
+      el.scrollBy({ left: 320, behavior: "smooth" });
+    }
+  };
+  
+  const scrollLeft = () => {
+    const el = sliderRef.current;
+    if (!el) return;
+  
+    const maxScroll = el.scrollWidth - el.clientWidth;
+  
+    if (el.scrollLeft <= 5) {
+      el.scrollTo({ left: maxScroll, behavior: "smooth" });
+    } else {
+      el.scrollBy({ left: -320, behavior: "smooth" });
+    }
+  };
+  
   return (
     <div className="home-container">
       {/* Hero Section */}
@@ -125,80 +155,55 @@ export const HomeClient = () => {
             </p>
           </div>
           <div className="products-grid">
-            <div className="product-card">
-              <div className="product-image">
-                <div className="product-placeholder">
-                  <svg
-                    width="64"
-                    height="64"
-                    viewBox="0 0 24 24"
-                    fill="none"
-                    stroke="currentColor"
-                    strokeWidth="2"
-                  >
-                    <rect x="3" y="3" width="18" height="18" rx="2" ry="2" />
-                    <path d="M3 9h18M9 21V9" />
-                  </svg>
-                </div>
-              </div>
-              <div className="product-content">
-                <h3>Sản phẩm 1</h3>
-                <p>Mô tả chi tiết về sản phẩm đầu tiên của chúng tôi</p>
-                <Link href="/products" className="product-link">
-                  Xem thêm →
-                </Link>
-              </div>
+          {userData && userData.length === 0 ? (
+              <p>Không có người dùng để hiển thị.</p>
+            ) : (
+              // Kiểm tra: Nếu là mảng thì mới map, còn không thì trả về mảng rỗng []
+            <div className="slider-wrapper" style={{ position: 'relative' }}>
+            {/* Nút TRÁI */}
+            {hasData && (
+              <button 
+                onClick={scrollLeft}
+                className="nav-btn prev-btn"
+                aria-label="Scroll Left"
+              >
+                <ChevronLeft size={24} />
+              </button>
+            )}
+
+            {/* Khung chứa danh sách (Gắn ref vào đây) */}
+            {/* Quan trọng: Phải đổi class để nó nằm ngang (flex) thay vì grid */}
+            <div 
+              ref={sliderRef} 
+              className="products-slider"
+            >
+              {!hasData ? (
+                <p>Không có dữ liệu.</p>
+              ) : (
+                safeUserData.map((user) => (
+                  // Bọc trong div để giữ kích thước cố định cho mỗi item
+                  <div key={user.id} className="slider-item">
+                    <CardUser key={user.id} userData={user} />
+                  </div>
+                ))
+              )}
             </div>
-            <div className="product-card">
-              <div className="product-image">
-                <div className="product-placeholder">
-                  <svg
-                    width="64"
-                    height="64"
-                    viewBox="0 0 24 24"
-                    fill="none"
-                    stroke="currentColor"
-                    strokeWidth="2"
-                  >
-                    <rect x="3" y="3" width="18" height="18" rx="2" ry="2" />
-                    <path d="M3 9h18M9 21V9" />
-                  </svg>
-                </div>
-              </div>
-              <div className="product-content">
-                <h3>Sản phẩm 2</h3>
-                <p>Mô tả chi tiết về sản phẩm thứ hai của chúng tôi</p>
-                <Link href="/products" className="product-link">
-                  Xem thêm →
-                </Link>
-              </div>
-            </div>
-            <div className="product-card">
-              <div className="product-image">
-                <div className="product-placeholder">
-                  <svg
-                    width="64"
-                    height="64"
-                    viewBox="0 0 24 24"
-                    fill="none"
-                    stroke="currentColor"
-                    strokeWidth="2"
-                  >
-                    <rect x="3" y="3" width="18" height="18" rx="2" ry="2" />
-                    <path d="M3 9h18M9 21V9" />
-                  </svg>
-                </div>
-              </div>
-              <div className="product-content">
-                <h3>Sản phẩm 3</h3>
-                <p>Mô tả chi tiết về sản phẩm thứ ba của chúng tôi</p>
-                <Link href="/products" className="product-link">
-                  Xem thêm →
-                </Link>
-              </div>
-            </div>
+
+            {/* Nút PHẢI */}
+            {hasData && (
+              <button 
+                onClick={scrollRight}
+                className="nav-btn next-btn"
+                aria-label="Scroll Right"
+              >
+                <ChevronRight size={24} />
+              </button>
+            )}
+            
           </div>
-        </div>
+)}
+    </div>
+          </div>
       </section>
 
       {/* CTA Section */}

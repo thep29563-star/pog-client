@@ -17,6 +17,9 @@ export const API_ENDPOINTS = {
     REGISTER: "/RegisterUser",
     LOGOUT: "/logout",
   },
+USER :{
+    GET_USER: "/Users",
+}
 } as const;
 
 
