@@ -352,66 +352,178 @@ html {
     padding: 1.25rem;
   }
 }
-/* Container bọc ngoài để căn vị trí nút bấm */
-.slider-wrapper {
+
+/* ========== Selling Products Section Header ========== */
+.selling-section-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 30px;
+}
+
+.selling-section-title {
+  font-size: 1.75rem;
+  font-weight: 700;
+  color: #333;
   position: relative;
-  width: 100%;
-  /*padding: 0 20px; /* Chừa chỗ cho nút bấm */
+  padding-left: 15px;
+  font-style: italic;
 }
 
-/* Thanh trượt chính */
-.products-slider {
-  display: flex; /* Xếp hàng ngang */
-  gap: 20px;     /* Khoảng cách giữa các card */
-  overflow-x: auto; /* Cho phép cuộn ngang */
-  scroll-behavior: smooth; /* Cuộn mượt */
-  padding-bottom: 20px; /* Chừa chỗ cho thanh cuộn (nếu có) */
-  
-  /* Ẩn thanh cuộn mặc định đi cho đẹp */
-  scrollbar-width: none; /* Firefox */
-  -ms-overflow-style: none; /* IE/Edge */
+.selling-section-title::before {
+  content: '';
+  position: absolute;
+  left: 0;
+  top: 50%;
+  transform: translateY(-50%);
+  width: 4px;
+  height: 70%;
+  background: linear-gradient(180deg, #1a73e8 0%, #4285f4 100%);
+  border-radius: 2px;
 }
 
-/* Ẩn thanh cuộn trên Chrome/Safari */
-.products-slider::-webkit-scrollbar {
-  display: none;
+.view-all-link {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  text-decoration: none;
+  color: #1a73e8;
+  font-weight: 500;
+  font-size: 1rem;
+  transition: all 0.3s ease;
+  padding: 8px 12px;
+  border-radius: 8px;
 }
 
-/* Định kích thước cứng cho mỗi item để slider đều nhau */
+.view-all-link:hover {
+  background: rgba(26, 115, 232, 0.08);
+  color: #1557b0;
+}
+
+.view-all-text {
+  white-space: nowrap;
+}
+
+.arrow-icon {
+  transition: transform 0.3s ease;
+}
+
+.view-all-link:hover .arrow-icon {
+  transform: translateX(4px);
+}
+
+.no-data-text {
+  color: #666;
+  font-size: 1rem;
+  padding: 20px;
+}
+
+/* ========== React Slick Slider Styles ========== */
+.slider-container {
+  position: relative;
+  padding: 0 50px; /* Chừa chỗ cho arrows */
+}
+
+.slider-container .slick-list {
+  overflow: hidden;
+}
+
+.slider-container .slick-track {
+  display: flex;
+  gap: 0;
+}
+
+.slider-container .slick-slide {
+  padding: 0 10px;
+}
+
+.slider-container .slick-slide > div {
+  height: 100%;
+}
+
+/* Slider item */
 .slider-item {
-  min-width: 300px; /* Chiều rộng tối thiểu mỗi card */
-  max-width: 300px;
-  flex-shrink: 0; /* Không cho phép co nhỏ lại */
+  padding: 10px 0;
 }
 
-/* Style cho 2 nút bấm */
-.nav-btn {
+.slider-item .product-card {
+  height: 100%;
+  cursor: grab;
+}
+
+.slider-item .product-card:active {
+  cursor: grabbing;
+}
+
+/* Custom Arrow Styles */
+.custom-arrow {
   position: absolute;
   top: 50%;
   transform: translateY(-50%);
   z-index: 10;
   background: white;
-  border: 1px solid #ddd;
+  border: 1px solid #e0e0e0;
   border-radius: 50%;
-  width: 40px;
-  height: 40px;
-  display: flex;
+  width: 44px;
+  height: 44px;
+  display: flex !important;
   align-items: center;
   justify-content: center;
   cursor: pointer;
-  box-shadow: 0 4px 6px rgba(0,0,0,0.1);
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
   transition: all 0.3s ease;
+  color: #333;
 }
 
-.nav-btn:hover {
-  background: #f0f0f0;
-  transform: translateY(-50%) scale(1.1);
+.custom-arrow:hover {
+  background: #f5f5f5;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+  transform: translateY(-50%) scale(1.05);
 }
 
-.prev-btn {
-  left: -10px; /* Đẩy sang trái */
+.custom-arrow.slick-prev {
+  left: 0;
 }
 
-.next-btn {
-  right: -10px; /* Đẩy sang phải */
+.custom-arrow.slick-next {
+  right: 0;
+}
+
+/* Hide default slick arrows */
+.slick-prev:before,
+.slick-next:before {
+  display: none;
+}
+
+/* Responsive for slider */
+@media (max-width: 768px) {
+  .slider-container {
+    padding: 0 10px;
+  }
+
+  .selling-section-header {
+    margin-bottom: 20px;
+  }
+
+  .selling-section-title {
+    font-size: 1.25rem;
+  }
+
+  .view-all-text {
+    display: none;
+  }
+
+  .view-all-link {
+    padding: 8px;
+  }
+
+  .slider-container .slick-slide {
+    padding: 0 5px;
+  }
+}
+
+@media (max-width: 480px) {
+  .selling-section-title {
+    font-size: 1.1rem;
+  }
 }

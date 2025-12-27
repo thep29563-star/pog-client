@@ -1,12 +1,30 @@
 "use client";
 
 import "./Home.css";
+import "slick-carousel/slick/slick.css";
+import "slick-carousel/slick/slick-theme.css";
+
 import Link from "next/link";
-import { useEffect, useRef } from "react";
+import { useEffect, useState } from "react";
+import Slider from "react-slick";
 import CardUser, { UserData } from "./components/CardUser";
 import { ChevronLeft, ChevronRight } from "react-bootstrap-icons";
+
+// Custom Arrow Components
+const PrevArrow = ({ onClick }: { onClick?: () => void }) => (
+  <button className="slick-arrow slick-prev custom-arrow" onClick={onClick} aria-label="Previous">
+    <ChevronLeft size={24} />
+  </button>
+);
+
+const NextArrow = ({ onClick }: { onClick?: () => void }) => (
+  <button className="slick-arrow slick-next custom-arrow" onClick={onClick} aria-label="Next">
+    <ChevronRight size={24} />
+  </button>
+);
+
 export const HomeClient = ({userData}:{userData:UserData[]}) => {
-  const sliderRef = useRef<HTMLDivElement>(null);
+  const [isDragging, setIsDragging] = useState(false);
 
   useEffect(() => {
     // Xử lý scroll đến section khi có hash trong URL
@@ -28,32 +46,54 @@ export const HomeClient = ({userData}:{userData:UserData[]}) => {
       }, 100);
     }
   }, []);
+
   const safeUserData = Array.isArray(userData) ? userData : [];
   const hasData = safeUserData.length > 0;
-  const scrollRight = () => {
-    const el = sliderRef.current;
-    if (!el) return;
-  
-    const maxScroll = el.scrollWidth - el.clientWidth;
-  
-    if (el.scrollLeft >= maxScroll - 5) {
-      el.scrollTo({ left: 0, behavior: "smooth" });
-    } else {
-      el.scrollBy({ left: 320, behavior: "smooth" });
-    }
-  };
-  
-  const scrollLeft = () => {
-    const el = sliderRef.current;
-    if (!el) return;
-  
-    const maxScroll = el.scrollWidth - el.clientWidth;
-  
-    if (el.scrollLeft <= 5) {
-      el.scrollTo({ left: maxScroll, behavior: "smooth" });
-    } else {
-      el.scrollBy({ left: -320, behavior: "smooth" });
-    }
+
+  // Slider settings
+  const sliderSettings = {
+    infinite: true,           // Vuốt liên tục vòng tròn
+    speed: 500,               // Tốc độ chuyển slide (ms)
+    slidesToShow: 4,          // Hiển thị 4 sản phẩm cùng lúc
+    slidesToScroll: 1,        // Vuốt 1 sản phẩm mỗi lần
+    autoplay: true,           // Tự động chuyển slide
+    autoplaySpeed: 3000,      // Thời gian giữa các lần auto chuyển
+    arrows: true,             // Hiển thị nút mũi tên
+    dots: false,              // Ẩn dots navigation
+    swipe: true,              // Cho phép vuốt touch
+    swipeToSlide: true,       // Vuốt trực tiếp đến slide
+    touchMove: true,          // Cho phép di chuyển touch
+    draggable: true,          // Cho phép kéo trên desktop
+    pauseOnHover: true,       // Dừng autoplay khi hover
+    prevArrow: <PrevArrow />,
+    nextArrow: <NextArrow />,
+    beforeChange: () => setIsDragging(true),
+    afterChange: () => setIsDragging(false),
+    responsive: [
+      {
+        breakpoint: 1600,
+        settings: {
+          slidesToShow: 3,
+          slidesToScroll: 1,
+        }
+      },
+      {
+        breakpoint: 1200,
+        settings: {
+          slidesToShow: 2,
+          slidesToScroll: 1,
+        }
+      },
+      {
+        breakpoint: 768,
+        settings: {
+          slidesToShow: 1,
+          slidesToScroll: 1,
+          autoplay: false,    // Tắt autoplay trên mobile
+          arrows: false,      // Ẩn arrows trên mobile (dùng swipe)
+        }
+      }
+    ]
   };
   
   return (
@@ -148,62 +188,44 @@ export const HomeClient = ({userData}:{userData:UserData[]}) => {
       {/* Products Section */}
       <section className="products-section" id="products">
         <div className="container">
-          <div className="section-header">
-            <h2 className="section-title">Sản phẩm của chúng tôi</h2>
-            <p className="section-subtitle">
-              Khám phá các giải pháp phù hợp với nhu cầu của bạn
-            </p>
+          {/* Section Header với title và link Xem tất cả */}
+          <div className="selling-section-header">
+            <h2 className="selling-section-title">Sản Phẩm Bán Chạy</h2>
+            <Link href="/danh-sach-san-pham" className="view-all-link">
+              <span className="view-all-text">Xem tất cả</span>
+              <svg 
+                className="arrow-icon" 
+                width="20" 
+                height="20" 
+                viewBox="0 0 24 24" 
+                fill="none" 
+                stroke="currentColor" 
+                strokeWidth="2"
+              >
+                <path d="M5 12h14M12 5l7 7-7 7" />
+              </svg>
+            </Link>
           </div>
-          <div className="products-grid">
-          {userData && userData.length === 0 ? (
-              <p>Không có người dùng để hiển thị.</p>
+
+          {/* Products Slider với react-slick */}
+          <div className="slider-container">
+            {!hasData ? (
+              <p className="no-data-text">Không có dữ liệu.</p>
             ) : (
-              // Kiểm tra: Nếu là mảng thì mới map, còn không thì trả về mảng rỗng []
-            <div className="slider-wrapper" style={{ position: 'relative' }}>
-            {/* Nút TRÁI */}
-            {hasData && (
-              <button 
-                onClick={scrollLeft}
-                className="nav-btn prev-btn"
-                aria-label="Scroll Left"
-              >
-                <ChevronLeft size={24} />
-              </button>
-            )}
-
-            {/* Khung chứa danh sách (Gắn ref vào đây) */}
-            {/* Quan trọng: Phải đổi class để nó nằm ngang (flex) thay vì grid */}
-            <div 
-              ref={sliderRef} 
-              className="products-slider"
-            >
-              {!hasData ? (
-                <p>Không có dữ liệu.</p>
-              ) : (
-                safeUserData.map((user) => (
-                  // Bọc trong div để giữ kích thước cố định cho mỗi item
+              <Slider {...sliderSettings}>
+                {safeUserData.map((user) => (
                   <div key={user.id} className="slider-item">
-                    <CardUser key={user.id} userData={user} />
+                    <CardUser 
+                      key={user.id} 
+                      userData={user} 
+                      isDragging={isDragging}
+                    />
                   </div>
-                ))
-              )}
-            </div>
-
-            {/* Nút PHẢI */}
-            {hasData && (
-              <button 
-                onClick={scrollRight}
-                className="nav-btn next-btn"
-                aria-label="Scroll Right"
-              >
-                <ChevronRight size={24} />
-              </button>
+                ))}
+              </Slider>
             )}
-            
           </div>
-)}
-    </div>
-          </div>
+        </div>
       </section>
 
       {/* CTA Section */}

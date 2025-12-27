@@ -9,10 +9,19 @@ export interface UserData {
 interface UserCardProps {
   key :string ;
   userData: UserData;
+  isDragging?: boolean; // Ngăn click khi đang vuốt
 }
-export default function CardUser({key, userData }: UserCardProps) {
+export default function CardUser({key, userData, isDragging = false }: UserCardProps) {
+  const handleClick = (e: React.MouseEvent) => {
+    // Ngăn click vào card khi đang vuốt slider
+    if (isDragging) {
+      e.preventDefault();
+      e.stopPropagation();
+    }
+  };
+
 return (
-<div className="product-card"> {/* Giữ nguyên class cũ để ăn CSS của bạn */}
+<div className="product-card" onClick={handleClick}> {/* Giữ nguyên class cũ để ăn CSS của bạn */}
       <div className="product-image">
         <div className="product-placeholder">
           {/* Icon User thay cho icon hộp */}

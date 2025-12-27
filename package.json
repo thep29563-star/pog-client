@@ -9,12 +9,15 @@
     "lint": "eslint"
   },
   "dependencies": {
+    "@types/react-slick": "^0.23.13",
     "bootstrap": "^5.3.8",
     "next": "16.1.1",
     "react": "19.2.3",
     "react-bootstrap": "^2.10.10",
     "react-bootstrap-icons": "^1.11.6",
-    "react-dom": "19.2.3"
+    "react-dom": "19.2.3",
+    "react-slick": "^0.31.0",
+    "slick-carousel": "^1.8.1"
   },
   "devDependencies": {
     "@tailwindcss/postcss": "^4",
