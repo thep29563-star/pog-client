@@ -63,13 +63,13 @@ export const Footer = () => {
                 <Link href="/">Trang chủ</Link>
               </li>
               <li>
-                <Link href="/about">Về chúng tôi</Link>
+                <Link href="/">Về chúng tôi</Link>
               </li>
               <li>
-                <Link href="/products">Sản phẩm</Link>
+                <Link href="/">Sản phẩm</Link>
               </li>
               <li>
-                <Link href="/contact">Liên hệ</Link>
+                <Link href="/">Liên hệ</Link>
               </li>
             </ul>
           </div>
@@ -79,16 +79,16 @@ export const Footer = () => {
             <h4 className="footer-title">Hỗ trợ</h4>
             <ul className="footer-links">
               <li>
-                <Link href="/help">Trung tâm trợ giúp</Link>
+                <Link href="/">Trung tâm trợ giúp</Link>
               </li>
               <li>
-                <Link href="/faq">Câu hỏi thường gặp</Link>
+                <Link href="/">Câu hỏi thường gặp</Link>
               </li>
               <li>
-                <Link href="/privacy">Chính sách bảo mật</Link>
+                <Link href="/">Chính sách bảo mật</Link>
               </li>
               <li>
-                <Link href="/terms">Điều khoản sử dụng</Link>
+                <Link href="/">Điều khoản sử dụng</Link>
               </li>
             </ul>
           </div>
