@@ -7,7 +7,6 @@ export async function getUser(
     const response = await fetcher(getApiUrl(API_ENDPOINTS.USER.GET_USER), {
       method: "GET",
     });
-    console.log("User data fetched:", response);
     return response.data;
   } catch (error) {
     const errorMessage =

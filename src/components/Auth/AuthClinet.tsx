@@ -40,7 +40,6 @@ export const AuthClinet = () => {
     try {
       const response = await registerApi(data);
       if (response.success) {
-        console.log("Đăng ký thành công:");
         setIsLogin(true);
       } else {
         console.error("Đăng ký thất bại:", response.message);
