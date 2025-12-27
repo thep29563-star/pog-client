@@ -2,6 +2,7 @@ import { showToast } from "../store/toastSlice";
 import { store } from "../store/store";
 import { fetcher, type FetcherOptions } from "./api/api";
 import { getApiUrl, API_ENDPOINTS } from "./api/config";
+import { USE_MOCK_DATA, mockLogin, mockRegister } from "../data/mockData";
 
 /**
  * Types cho Authentication
@@ -28,16 +29,24 @@ export async function loginApi(
   options?: FetcherOptions
 ) {
   try {
-    const response = await fetcher(getApiUrl(API_ENDPOINTS.AUTH.LOGIN), {
-      method: "POST",
-      body: credentials,
-      ...options,
-    });
+    let response;
+
+    // Sử dụng mock data nếu được bật
+    if (USE_MOCK_DATA) {
+      response = await mockLogin(credentials.userName, credentials.passwordHash);
+    } else {
+      response = await fetcher(getApiUrl(API_ENDPOINTS.AUTH.LOGIN), {
+        method: "POST",
+        body: credentials,
+        ...options,
+      });
+    }
+
     if (response.success && response.userDto) {
       if (typeof window !== "undefined") {
         // Lưu userDto nhưng bỏ passwordHash
-        const { passwordHash, ...safeUserDto } = response.userDto;
-        localStorage.setItem("userDto", JSON.stringify(safeUserDto));
+        const { passwordHash, ...safeUserDto } = response.userDto as any;
+        localStorage.setItem("userDto", JSON.stringify(safeUserDto || response.userDto));
       }
     }
     store.dispatch(showToast({
@@ -69,12 +78,24 @@ export async function registerApi(
   options?: FetcherOptions
 ){
   try {
-    const response = await fetcher(getApiUrl(API_ENDPOINTS.AUTH.REGISTER), {
-      method: "POST",
-      body: userData,
-      ...options,
-    });
- store.dispatch(showToast({
+    let response;
+
+    // Sử dụng mock data nếu được bật
+    if (USE_MOCK_DATA) {
+      response = await mockRegister(
+        userData.userName,
+        userData.email,
+        userData.passwordHash
+      );
+    } else {
+      response = await fetcher(getApiUrl(API_ENDPOINTS.AUTH.REGISTER), {
+        method: "POST",
+        body: userData,
+        ...options,
+      });
+    }
+
+    store.dispatch(showToast({
         message: response.message ,
         severity: response.success ? "success" : "error",
         time: 3000,
