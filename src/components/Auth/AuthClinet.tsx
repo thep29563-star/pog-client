@@ -24,15 +24,11 @@ export const AuthClinet = () => {
   }) => {
     try {
       const response = await loginApi(data);
-      if (response.success && response.data?.userDto) {
+      if (response) {
         router.push("/");
-      } else {
-        console.error("Đăng nhập thất bại:", response.message);
-        alert(response.message || "Đăng nhập thất bại");
-      }
+      } 
     } catch (error) {
       console.error("Lỗi đăng nhập:", error);
-      alert("Có lỗi xảy ra khi đăng nhập");
     }
   };
 
@@ -48,11 +44,9 @@ export const AuthClinet = () => {
         setIsLogin(true);
       } else {
         console.error("Đăng ký thất bại:", response.message);
-        alert(response.message || "Đăng ký thất bại");
       }
     } catch (error) {
       console.error("Lỗi đăng ký:", error);
-      alert("Có lỗi xảy ra khi đăng ký");
     }
   };
   return (

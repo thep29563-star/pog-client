@@ -7,6 +7,8 @@ import { Header } from "../layouts/Header";
 import { Footer } from "../layouts/Footer";
 import "bootstrap/dist/css/bootstrap.min.css";
 import { LayoutProvider } from "../contexts/LayoutContext";
+import { ReduxProvider } from "../store/ReduxProvider";
+import Toast from "../components/Toast/Toast";
 
 const inter = Inter({ subsets: ["latin"] });
 
@@ -23,16 +25,18 @@ export default function RootLayout({
   return (
     <html lang="en">
       <body className={inter.className}>
-        <LayoutProvider>
-
-        <div style={{ display: 'flex', flexDirection: 'column', minHeight: '100vh' }}>
-          <Header />
-          <main style={{ flex: 1 }}>
-            {children}
-          </main>
-          <Footer />
-        </div>
-        </LayoutProvider>
+        <ReduxProvider>
+          <LayoutProvider>
+            <Toast />
+            <div style={{ display: 'flex', flexDirection: 'column', minHeight: '100vh' }}>
+              <Header />
+              <main style={{ flex: 1 }}>
+                {children}
+              </main>
+              <Footer />
+            </div>
+          </LayoutProvider>
+        </ReduxProvider>
       </body>
     </html>
   );

@@ -9,6 +9,7 @@
     "lint": "eslint"
   },
   "dependencies": {
+    "@reduxjs/toolkit": "^2.11.2",
     "@types/react-slick": "^0.23.13",
     "bootstrap": "^5.3.8",
     "next": "16.1.1",
@@ -16,6 +17,7 @@
     "react-bootstrap": "^2.10.10",
     "react-bootstrap-icons": "^1.11.6",
     "react-dom": "19.2.3",
+    "react-redux": "^9.2.0",
     "react-slick": "^0.31.0",
     "slick-carousel": "^1.8.1"
   },

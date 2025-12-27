@@ -18,10 +18,7 @@ export const Register = ({ onSwitchToLogin, onSubmit }: RegisterProps) => {
     const passwordHash = formData.get("passwordHash") as string;
     const confirmPasswordHash = formData.get("confirmPasswordHash") as string;
 
-    if (passwordHash !== confirmPasswordHash) {
-      alert("Mật khẩu xác nhận không khớp!");
-      return;
-    }
+  
 
     const data = { userName, email, passwordHash };
     onSubmit(data);

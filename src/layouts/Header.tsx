@@ -6,6 +6,8 @@ import Image from "next/image";
 import { useState, useEffect, useRef, useContext } from "react";
 import { usePathname, useRouter } from "next/navigation";
 import { useLayout } from "../contexts/LayoutContext";
+import { showToast } from "../store/toastSlice";
+import { useDispatch } from "react-redux";
 
 export const Header = () => {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
@@ -14,6 +16,7 @@ export const Header = () => {
   const accountMenuRef = useRef<HTMLDivElement>(null);
   const pathname = usePathname();
   const router = useRouter();
+  const dispatch = useDispatch();
   const { userDto,logout } = useLayout(); // Destructure để lấy userDto từ context
   const toggleMenu = () => {
     setIsMenuOpen(!isMenuOpen);
@@ -67,7 +70,12 @@ export const Header = () => {
     setIsLoggedIn(false);
     setIsAccountMenuOpen(false);
     logout();
-    router.push('/');
+    dispatch(showToast({
+      message: "Đăng xuất thành công",
+      severity: "success",
+      time: 3000,
+    }));
+    router.push('/auth');
   };
 
   const handleGoToProfile = () => {

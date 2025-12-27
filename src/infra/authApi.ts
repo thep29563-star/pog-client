@@ -1,3 +1,5 @@
+import { showToast } from "../store/toastSlice";
+import { store } from "../store/store";
 import { fetcher, type FetcherOptions } from "./api/api";
 import { getApiUrl, API_ENDPOINTS } from "./api/config";
 
@@ -15,27 +17,6 @@ export interface RegisterRequest {
   passwordHash: string;
 }
 
-export interface AuthResponse {
-  success: boolean;
-  message?: string;
-  data?: {
-    success: boolean;
-    message?: string;
-    userDto: {
-      id: string;
-      userName: string;
-      email: string;
-      passwordHash?: string;
-    };
-  };
-}
-
-export interface ErrorResponse {
-  success: false;
-  message: string;
-  errors?: Record<string, string[]>;
-}
-
 /**
  * API đăng nhập
  * @param credentials - userName và passwordHash
@@ -45,7 +26,7 @@ export interface ErrorResponse {
 export async function loginApi(
   credentials: LoginRequest,
   options?: FetcherOptions
-): Promise<AuthResponse> {
+) {
   try {
     const response = await fetcher(getApiUrl(API_ENDPOINTS.AUTH.LOGIN), {
       method: "POST",
@@ -60,17 +41,21 @@ export async function loginApi(
         console.log("response userDto:", safeUserDto);
       }
     }
-    return {
-      success: true,
-      data: response,
-    };
+    store.dispatch(showToast({
+        message: response.message ,
+        severity: response.success ? "success" : "error",
+        time: 3000,
+      }))
+    return response;
   } catch (error) {
     const errorMessage =
       error instanceof Error ? error.message : "Đăng nhập thất bại";
-    return {
-      success: false,
-      message: errorMessage,
-    };
+      store.dispatch(showToast({
+        message: errorMessage,
+        severity: "error",
+        time: 5000,
+      }))
+  return null;
   }
 }
 
@@ -83,25 +68,28 @@ export async function loginApi(
 export async function registerApi(
   userData: RegisterRequest,
   options?: FetcherOptions
-): Promise<AuthResponse> {
+){
   try {
     const response = await fetcher(getApiUrl(API_ENDPOINTS.AUTH.REGISTER), {
       method: "POST",
       body: userData,
       ...options,
     });
-
-    return {
-      success: true,
-      data: response,
-    };
+ store.dispatch(showToast({
+        message: response.message ,
+        severity: response.success ? "success" : "error",
+        time: 3000,
+      }))
+   return response;
   } catch (error) {
     const errorMessage =
       error instanceof Error ? error.message : "Đăng ký thất bại";
-    return {
-      success: false,
-      message: errorMessage,
-    };
+      store.dispatch(showToast({
+        message: errorMessage,
+        severity: "error",
+        time: 5000,
+      }))
+  return null;
   }
 }
 
@@ -111,32 +99,32 @@ export async function registerApi(
  * @param options - Tùy chọn bổ sung cho fetcher
  * @returns Promise với kết quả đăng xuất
  */
-export async function logoutApi(
-  token: string,
-  options?: FetcherOptions
-): Promise<{ success: boolean; message?: string }> {
-  try {
-    await fetcher(getApiUrl(API_ENDPOINTS.AUTH.LOGOUT), {
-      method: "POST",
-      headers: {
-        Authorization: `Bearer ${token}`,
-      },
-      ...options,
-    });
+// export async function logoutApi(
+//   token: string,
+//   options?: FetcherOptions
+// ): Promise<{ success: boolean; message?: string }> {
+//   try {
+//     await fetcher(getApiUrl(API_ENDPOINTS.AUTH.LOGOUT), {
+//       method: "POST",
+//       headers: {
+//         Authorization: `Bearer ${token}`,
+//       },
+//       ...options,
+//     });
 
-    return {
-      success: true,
-      message: "Đăng xuất thành công",
-    };
-  } catch (error) {
-    const errorMessage =
-      error instanceof Error ? error.message : "Đăng xuất thất bại";
-    return {
-      success: false,
-      message: errorMessage,
-    };
-  }
-}
+//     return {
+//       success: true,
+//       message: "Đăng xuất thành công",
+//     };
+//   } catch (error) {
+//     const errorMessage =
+//       error instanceof Error ? error.message : "Đăng xuất thất bại";
+//     return {
+//       success: false,
+//       message: errorMessage,
+//     };
+//   }
+// }
 
 /**
  * API lấy thông tin profile
@@ -144,32 +132,32 @@ export async function logoutApi(
  * @param options - Tùy chọn bổ sung cho fetcher
  * @returns Promise với thông tin user
  */
-export async function getProfileApi(
-  token: string,
-  options?: FetcherOptions
-): Promise<AuthResponse> {
-  try {
-    const response = await fetcher(getApiUrl(API_ENDPOINTS.AUTH.PROFILE), {
-      method: "GET",
-      headers: {
-        Authorization: `Bearer ${token}`,
-      },
-      ...options,
-    });
+// export async function getProfileApi(
+//   token: string,
+//   options?: FetcherOptions
+// ): Promise<AuthResponse> {
+//   try {
+//     const response = await fetcher(getApiUrl(API_ENDPOINTS.AUTH.PROFILE), {
+//       method: "GET",
+//       headers: {
+//         Authorization: `Bearer ${token}`,
+//       },
+//       ...options,
+//     });
 
-    return {
-      success: true,
-      data: response,
-    };
-  } catch (error) {
-    const errorMessage =
-      error instanceof Error ? error.message : "Lấy thông tin thất bại";
-    return {
-      success: false,
-      message: errorMessage,
-    };
-  }
-}
+//     return {
+//       success: true,
+//       data: response,
+//     };
+//   } catch (error) {
+//     const errorMessage =
+//       error instanceof Error ? error.message : "Lấy thông tin thất bại";
+//     return {
+//       success: false,
+//       message: errorMessage,
+//     };
+//   }
+// }
 
 /**
  * API quên mật khẩu
@@ -177,30 +165,30 @@ export async function getProfileApi(
  * @param options - Tùy chọn bổ sung cho fetcher
  * @returns Promise với kết quả
  */
-export async function forgotPasswordApi(
-  email: string,
-  options?: FetcherOptions
-): Promise<{ success: boolean; message?: string }> {
-  try {
-    const response = await fetcher(
-      getApiUrl(API_ENDPOINTS.AUTH.FORGOT_PASSWORD),
-      {
-        method: "POST",
-        body: { email },
-        ...options,
-      }
-    );
+// export async function forgotPasswordApi(
+//   email: string,
+//   options?: FetcherOptions
+// ): Promise<{ success: boolean; message?: string }> {
+//   try {
+//     const response = await fetcher(
+//       getApiUrl(API_ENDPOINTS.AUTH.FORGOT_PASSWORD),
+//       {
+//         method: "POST",
+//         body: { email },
+//         ...options,
+//       }
+//     );
 
-    return {
-      success: true,
-      message: response.message || "Email đặt lại mật khẩu đã được gửi",
-    };
-  } catch (error) {
-    const errorMessage =
-      error instanceof Error ? error.message : "Gửi email thất bại";
-    return {
-      success: false,
-      message: errorMessage,
-    };
-  }
-}
+//     return {
+//       success: true,
+//       message: response.message || "Email đặt lại mật khẩu đã được gửi",
+//     };
+//   } catch (error) {
+//     const errorMessage =
+//       error instanceof Error ? error.message : "Gửi email thất bại";
+//     return {
+//       success: false,
+//       message: errorMessage,
+//     };
+//   }
+// }
