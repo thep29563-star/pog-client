@@ -25,9 +25,6 @@ export const Header = () => {
     const storedUser = localStorage.getItem("userDto");
     if (storedUser) {
       setIsLoggedIn(true);
-    } else {
-      // Redirect to login if not logged in
-      router.push("/auth");
     }
   };
   const closeMenu = () => {
