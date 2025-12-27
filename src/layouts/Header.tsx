@@ -3,40 +3,25 @@
 import "./Header.css";
 import Link from "next/link";
 import Image from "next/image";
-import { useState, useEffect } from "react";
+import { useState, useEffect, useRef, useContext } from "react";
 import { usePathname, useRouter } from "next/navigation";
+import { useLayout } from "../contexts/LayoutContext";
 
 export const Header = () => {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
-  const [showUserMenu, setShowUserMenu] = useState(false);
+  const [isAccountMenuOpen, setIsAccountMenuOpen] = useState(false);
+  const [isLoggedIn, setIsLoggedIn] = useState(false);
+  const accountMenuRef = useRef<HTMLDivElement>(null);
   const pathname = usePathname();
   const router = useRouter();
-  const [userDto, setUserDto] = useState<any>(null);
-  useEffect(() => {
-    if (typeof window !== 'undefined') {
-      const storedData = localStorage.getItem('userDto');
-      
-      if (storedData) {
-        setUserDto(storedData); 
-      }
-    }
-  }, []);
+  const { userDto,logout } = useLayout(); // Destructure để lấy userDto từ context
   const toggleMenu = () => {
     setIsMenuOpen(!isMenuOpen);
   };
-
+  const [user, setUser] = useState<typeof userDto | null>(null);
   const closeMenu = () => {
     setIsMenuOpen(false);
   };
-
-  const handleLogout = () => {
-
-    setShowUserMenu(false);
-    localStorage.removeItem("userDto");
-    router.push("/");
-  };
-
-  
 
   const handleScrollTo = (
     sectionId: string,
@@ -64,6 +49,30 @@ export const Header = () => {
         behavior: "smooth",
       });
     }
+  };
+  const handleAccountClick = () => {
+    closeMenu();
+    const storedUser = localStorage.getItem('userDto');
+    if (storedUser) {
+      setIsAccountMenuOpen(!isAccountMenuOpen);
+      setIsLoggedIn(true);
+
+    } else {
+      // Redirect to login if not logged in
+      router.push('/auth');
+    }
+  };
+
+  const handleLogout = () => {
+    setIsLoggedIn(false);
+    setIsAccountMenuOpen(false);
+    logout();
+    router.push('/');
+  };
+
+  const handleGoToProfile = () => {
+    setIsAccountMenuOpen(false);
+    router.push('/user');
   };
 
   return (
@@ -121,51 +130,72 @@ export const Header = () => {
                   className="nav-link"
                   onClick={(e) => handleScrollTo("products", e)}
                 >
-                  Sản phẩm
+                  Người dùng
                 </a>
               </li>
             </ul>
-
-              {/* <div className="user-menu-container">
-                <div
-                  className="user-avatar"
-                  onClick={() => setShowUserMenu(!showUserMenu)}
+              {/* Account Button with Dropdown */}
+              <div className="account-container" ref={accountMenuRef}>
+                <button
+                  className="account-btn"
+                  onClick={handleAccountClick}
+                  aria-label="Tài khoản"
                 >
-                  <div className="avatar-circle">
-                    {getInitials(userDto.name, userDto.userName)}
-                  </div>
-                  <span className="user-name">
-                    {userDto.name || userDto.userName || "User"}``
-                  </span>
-                </div>
-                {showUserMenu && (
-                  <div className="user-dropdown">
-                    <Link
-                      href="/user"
+                  <Image
+                    src="/images/account.svg"
+                    alt="Account"
+                    width={30}
+                    height={30}
+                    className="account-icon"
+                  />
+                </button>
+
+                {isLoggedIn && isAccountMenuOpen && (
+                  <div className="account-dropdown">
+                    {/* User Info Section */}
+                    <div className="dropdown-user-info">
+                      <div className="user-avatar-small">
+                        {userDto?.userName?.charAt(0).toUpperCase() || 'U'}
+                      </div>
+                      <div className="user-details">
+                        <span className="user-name-text" title={userDto?.userName || ''}>
+                          {userDto?.userName && userDto.userName.length > 15 
+                            ? userDto.userName.substring(0, 15) + '...' 
+                            : userDto?.userName || 'User'}
+                        </span>
+                        <span className="user-email-text" title={userDto?.email || ''}>
+                          {userDto?.email && userDto.email.length > 20 
+                            ? userDto.email.substring(0, 20) + '...' 
+                            : userDto?.email || ''}
+                        </span>
+                      </div>
+                    </div>
+                    <div className="dropdown-divider"></div>
+                    <button 
                       className="dropdown-item"
-                      onClick={() => {
-                        setShowUserMenu(false);
-                        closeMenu();
-                      }}
+                      onClick={handleGoToProfile}
                     >
-                      Trang cá nhân
-                    </Link>
-                    <button className="dropdown-item" onClick={handleLogout}>
-                      Đăng xuất
+                      <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
+                        <path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"></path>
+                        <circle cx="12" cy="7" r="4"></circle>
+                      </svg>
+                      <span>Thông tin người dùng</span>
+                    </button>
+                    <div className="dropdown-divider"></div>
+                    <button 
+                      className="dropdown-item logout-item"
+                      onClick={handleLogout}
+                    >
+                      <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
+                        <path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4"></path>
+                        <polyline points="16 17 21 12 16 7"></polyline>
+                        <line x1="21" y1="12" x2="9" y2="12"></line>
+                      </svg>
+                      <span>Đăng xuất</span>
                     </button>
                   </div>
                 )}
               </div>
-            ) : ( */}
-              <Link
-                href="/auth"
-                className="btn btn-outline-primary"
-                onClick={closeMenu}
-              >
-                Đăng nhập
-              </Link>
-            
-            {/* )} */}
           </div>
         </div>
       </nav>

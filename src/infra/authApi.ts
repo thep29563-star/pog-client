@@ -19,13 +19,14 @@ export interface AuthResponse {
   success: boolean;
   message?: string;
   data?: {
-    user: {
+    success: boolean;
+    message?: string;
+    userDto: {
       id: string;
-      name: string;
+      userName: string;
       email: string;
+      passwordHash?: string;
     };
-    token: string;
-    refreshToken?: string;
   };
 }
 
@@ -51,12 +52,12 @@ export async function loginApi(
       body: credentials,
       ...options,
     });
-    if (response.success && response.data) {
+    if (response.success && response.userDto) {
       if (typeof window !== "undefined") {
-        localStorage.setItem(
-          "userDto",
-          JSON.stringify(response.data?.user || response.data)
-        );
+        // Lưu userDto nhưng bỏ passwordHash
+        const { passwordHash, ...safeUserDto } = response.userDto;
+        localStorage.setItem("userDto", JSON.stringify(safeUserDto));
+        console.log("response userDto:", safeUserDto);
       }
     }
     return {

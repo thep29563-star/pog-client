@@ -24,11 +24,7 @@ export const AuthClinet = () => {
   }) => {
     try {
       const response = await loginApi(data);
-      if (response.success && response.data) {
-        console.log("Đăng nhập thành công:", response.data);
-        // Dispatch event để Header cập nhật
-        window.dispatchEvent(new Event("userLogin"));
-        // Redirect về trang chủ
+      if (response.success && response.data?.userDto) {
         router.push("/");
       } else {
         console.error("Đăng nhập thất bại:", response.message);

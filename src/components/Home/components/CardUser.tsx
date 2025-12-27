@@ -7,11 +7,10 @@ export interface UserData {
 }
 
 interface UserCardProps {
-  key :string ;
   userData: UserData;
   isDragging?: boolean; // Ngăn click khi đang vuốt
 }
-export default function CardUser({key, userData, isDragging = false }: UserCardProps) {
+export default function CardUser({ userData, isDragging = false }: UserCardProps) {
   const handleClick = (e: React.MouseEvent) => {
     // Ngăn click vào card khi đang vuốt slider
     if (isDragging) {
