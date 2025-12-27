@@ -111,6 +111,10 @@
   .navbar-toggler-icon {
     transition: transform 0.3s ease;
   }
+  .account-dropdown{
+    display: flex;
+    justify-content: space-between;
+  }
 }
 
 /* Desktop - Giữ nguyên Bootstrap behavior */
@@ -171,6 +175,7 @@
   z-index: 1000;
   overflow: hidden;
   animation: dropdownFadeIn 0.2s ease;
+  
 }
 
 @keyframes dropdownFadeIn {
@@ -302,15 +307,94 @@
     height: 28px;
   }
 
-  .account-dropdown {
+  /* Mobile Account - Giống như 1 nav-item */
+  .account-dropdown.mobile-account {
     position: static;
     width: 100%;
-    margin-top: 8px;
+    margin: 0;
+    padding: 0;
     box-shadow: none;
-    border: 1px solid #e0e0e0;
+    border: none;
+    border-radius: 0;
+    border-top: 1px solid #f0f0f0;
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+    align-items: center;
+    background: transparent;
   }
 
-  .account-dropdown::before {
+  .account-dropdown.mobile-account::before {
+    display: none;
+  }
+
+  /* User info section - giống nav-link */
+  .account-dropdown.mobile-account .dropdown-user-info {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    padding: 1rem 0;
+    border: none;
+    flex: 1;
+  }
+
+  .account-dropdown.mobile-account .user-avatar-small {
+    width: 36px;
+    height: 36px;
+    font-size: 14px;
+    box-shadow: 0 2px 6px rgba(102, 126, 234, 0.25);
+  }
+
+  .account-dropdown.mobile-account .user-details {
+    display: flex;
+    flex-direction: column;
+    gap: 1px;
+  }
+
+  .account-dropdown.mobile-account .user-name-text {
+    font-size: 14px;
+    font-weight: 500;
+    color: #333;
+  }
+
+  .account-dropdown.mobile-account .user-email-text {
+    font-size: 11px;
+    color: #888;
+  }
+
+  /* Logout button on mobile */
+  .mobile-logout-btn {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 36px;
+    height: 36px;
+    background: transparent;
+    border: none;
+    border-radius: 8px;
+    cursor: pointer;
+    transition: all 0.2s ease;
+    flex-shrink: 0;
+  }
+
+  .mobile-logout-btn:hover {
+    background: #fff5f5;
+  }
+
+  .mobile-logout-btn:active {
+    transform: scale(0.95);
+  }
+
+  .mobile-logout-btn svg {
+    width: 20px;
+    height: 20px;
+    color: #dc3545;
+    stroke: #dc3545;
+  }
+
+  /* Hide desktop-only elements on mobile */
+  .account-dropdown.mobile-account .dropdown-divider,
+  .account-dropdown.mobile-account .dropdown-item {
     display: none;
   }
 }

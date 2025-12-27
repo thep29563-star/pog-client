@@ -1,3 +1,4 @@
+import { Image } from "react-bootstrap";
 import "./Footer.css";
 import Link from "next/link";
 
@@ -8,7 +9,15 @@ export const Footer = () => {
         <div className="footer-content">
           {/* Brand Section */}
           <div className="footer-section">
-            <h3 className="footer-brand">POG</h3>
+            <Image
+              src="/images/logo.png"
+              alt="POG Logo"
+              width={120}
+              height={60}
+              className="footer-brand"
+              style={{ background: "transparent" }}
+            />
+
             <p className="footer-description">
               Nền tảng hiện đại cho mọi nhu cầu của bạn
             </p>

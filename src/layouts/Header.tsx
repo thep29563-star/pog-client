@@ -3,11 +3,12 @@
 import "./Header.css";
 import Link from "next/link";
 import Image from "next/image";
-import { useState, useEffect, useRef, useContext } from "react";
+import { useState, useEffect, useRef, useContext, use } from "react";
 import { usePathname, useRouter } from "next/navigation";
 import { useLayout } from "../contexts/LayoutContext";
 import { showToast } from "../store/toastSlice";
 import { useDispatch } from "react-redux";
+import { useMediaQuery } from "react-responsive";
 
 export const Header = () => {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
@@ -17,11 +18,18 @@ export const Header = () => {
   const pathname = usePathname();
   const router = useRouter();
   const dispatch = useDispatch();
-  const { userDto,logout } = useLayout(); // Destructure để lấy userDto từ context
+  const { userDto, logout } = useLayout(); // Destructure để lấy userDto từ context
+  const isMobile = useMediaQuery({ maxWidth: 991.98 });
   const toggleMenu = () => {
     setIsMenuOpen(!isMenuOpen);
+    const storedUser = localStorage.getItem("userDto");
+    if (storedUser) {
+      setIsLoggedIn(true);
+    } else {
+      // Redirect to login if not logged in
+      router.push("/auth");
+    }
   };
-  const [user, setUser] = useState<typeof userDto | null>(null);
   const closeMenu = () => {
     setIsMenuOpen(false);
   };
@@ -33,7 +41,6 @@ export const Header = () => {
     e.preventDefault();
     closeMenu();
 
-    // Nếu đang ở trang khác, chuyển về trang chủ trước
     if (pathname !== "/") {
       window.location.href = `/#${sectionId}`;
       return;
@@ -55,14 +62,13 @@ export const Header = () => {
   };
   const handleAccountClick = () => {
     closeMenu();
-    const storedUser = localStorage.getItem('userDto');
+    const storedUser = localStorage.getItem("userDto");
     if (storedUser) {
       setIsAccountMenuOpen(!isAccountMenuOpen);
       setIsLoggedIn(true);
-
     } else {
       // Redirect to login if not logged in
-      router.push('/auth');
+      router.push("/auth");
     }
   };
 
@@ -70,17 +76,19 @@ export const Header = () => {
     setIsLoggedIn(false);
     setIsAccountMenuOpen(false);
     logout();
-    dispatch(showToast({
-      message: "Đăng xuất thành công",
-      severity: "success",
-      time: 3000,
-    }));
-    router.push('/auth');
+    dispatch(
+      showToast({
+        message: "Đăng xuất thành công",
+        severity: "success",
+        time: 3000,
+      })
+    );
+    router.push("/auth");
   };
 
   const handleGoToProfile = () => {
     setIsAccountMenuOpen(false);
-    router.push('/user');
+    router.push("/user");
   };
 
   return (
@@ -142,7 +150,8 @@ export const Header = () => {
                 </a>
               </li>
             </ul>
-              {/* Account Button with Dropdown */}
+            {/* Account Button with Dropdown */}
+            {!isMobile ? (
               <div className="account-container" ref={accountMenuRef}>
                 <button
                   className="account-btn"
@@ -157,44 +166,63 @@ export const Header = () => {
                     className="account-icon"
                   />
                 </button>
-
                 {isLoggedIn && isAccountMenuOpen && (
                   <div className="account-dropdown">
                     {/* User Info Section */}
                     <div className="dropdown-user-info">
                       <div className="user-avatar-small">
-                        {userDto?.userName?.charAt(0).toUpperCase() || 'U'}
+                        {userDto?.userName?.charAt(0).toUpperCase() || "U"}
                       </div>
                       <div className="user-details">
-                        <span className="user-name-text" title={userDto?.userName || ''}>
-                          {userDto?.userName && userDto.userName.length > 15 
-                            ? userDto.userName.substring(0, 15) + '...' 
-                            : userDto?.userName || 'User'}
+                        <span
+                          className="user-name-text"
+                          title={userDto?.userName || ""}
+                        >
+                          {userDto?.userName && userDto.userName.length > 15
+                            ? userDto.userName.substring(0, 15) + "..."
+                            : userDto?.userName || "User"}
                         </span>
-                        <span className="user-email-text" title={userDto?.email || ''}>
-                          {userDto?.email && userDto.email.length > 20 
-                            ? userDto.email.substring(0, 20) + '...' 
-                            : userDto?.email || ''}
+                        <span
+                          className="user-email-text"
+                          title={userDto?.email || ""}
+                        >
+                          {userDto?.email && userDto.email.length > 20
+                            ? userDto.email.substring(0, 20) + "..."
+                            : userDto?.email || ""}
                         </span>
                       </div>
                     </div>
                     <div className="dropdown-divider"></div>
-                    <button 
+                    <button
                       className="dropdown-item"
                       onClick={handleGoToProfile}
                     >
-                      <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
+                      <svg
+                        width="18"
+                        height="18"
+                        viewBox="0 0 24 24"
+                        fill="none"
+                        stroke="currentColor"
+                        strokeWidth="2"
+                      >
                         <path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"></path>
                         <circle cx="12" cy="7" r="4"></circle>
                       </svg>
                       <span>Thông tin người dùng</span>
                     </button>
                     <div className="dropdown-divider"></div>
-                    <button 
+                    <button
                       className="dropdown-item logout-item"
                       onClick={handleLogout}
                     >
-                      <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
+                      <svg
+                        width="18"
+                        height="18"
+                        viewBox="0 0 24 24"
+                        fill="none"
+                        stroke="currentColor"
+                        strokeWidth="2"
+                      >
                         <path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4"></path>
                         <polyline points="16 17 21 12 16 7"></polyline>
                         <line x1="21" y1="12" x2="9" y2="12"></line>
@@ -204,6 +232,66 @@ export const Header = () => {
                   </div>
                 )}
               </div>
+            ) : isLoggedIn ? (
+              <div className="account-dropdown mobile-account">
+                <div className="dropdown-divider"></div>
+
+                {/* LEFT: User info */}
+                <div className="dropdown-user-info">
+                  <div className="user-avatar-small">
+                    {userDto?.userName?.charAt(0).toUpperCase() || "U"}
+                  </div>
+
+                  <div className="user-details">
+                    <span
+                      className="user-name-text"
+                      title={userDto?.userName || ""}
+                    >
+                      {userDto?.userName && userDto.userName.length > 15
+                        ? userDto.userName.substring(0, 15) + "..."
+                        : userDto?.userName || "User"}
+                    </span>
+
+                    <span
+                      className="user-email-text"
+                      title={userDto?.email || ""}
+                    >
+                      {userDto?.email && userDto.email.length > 20
+                        ? userDto.email.substring(0, 20) + "..."
+                        : userDto?.email || ""}
+                    </span>
+                  </div>
+                </div>
+
+                {/* RIGHT: Logout icon */}
+                <button
+                  className="mobile-logout-btn"
+                  onClick={handleLogout}
+                  aria-label="Đăng xuất"
+                >
+                  <svg
+                    width="22"
+                    height="22"
+                    viewBox="0 0 24 24"
+                    fill="none"
+                    stroke="currentColor"
+                    strokeWidth="2"
+                  >
+                    <path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4" />
+                    <polyline points="16 17 21 12 16 7" />
+                    <line x1="21" y1="12" x2="9" y2="12" />
+                  </svg>
+                </button>
+              </div>
+            ) : (
+              <button
+                className="account-btn"
+                onClick={handleAccountClick}
+                aria-label="Tài khoản"
+              >
+                Đăng nhập
+              </button>
+            )}
           </div>
         </div>
       </nav>

@@ -20,7 +20,7 @@
 .footer-brand {
   font-size: 1.8rem;
   font-weight: 700;
-  margin-bottom: 15px;
+  margin-bottom: 5px;
   letter-spacing: 1px;
 }
 
@@ -120,16 +120,58 @@
   }
 
   .footer-content {
-    grid-template-columns: 1fr;
-    gap: 30px;
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    grid-template-rows: auto auto;
+    gap: 30px 20px;
+  }
+
+  /* Row 1: Logo + Social icons bên trái, để trống bên phải hoặc gộp */
+  .footer-section:first-child {
+    grid-column: 1 / -1; /* Full width */
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    justify-content: space-between;
+    flex-wrap: wrap;
+    gap: 15px;
+  }
+
+  .footer-section:first-child .footer-description {
+    display: none; /* Ẩn description trên mobile */
+  }
+
+  .footer-section:first-child .social-links {
+    margin-left: auto;
+  }
+
+  /* Row 2: Liên kết nhanh + Hỗ trợ cùng 1 hàng */
+  .footer-section:nth-child(2),
+  .footer-section:nth-child(3) {
+    grid-column: span 1;
+  }
+
+  /* Row 3: Liên hệ full width */
+  .footer-section:nth-child(4) {
+    grid-column: 1 / -1;
   }
 
   .footer-brand {
     font-size: 1.5rem;
+    margin-bottom: 0;
   }
 
   .footer-title {
-    font-size: 1.1rem;
+    font-size: 1rem;
+    margin-bottom: 15px;
+  }
+
+  .footer-links li {
+    margin-bottom: 8px;
+  }
+
+  .footer-links a {
+    font-size: 0.9rem;
   }
 
   .social-links {
@@ -143,11 +185,44 @@
   }
 
   .footer-content {
-    gap: 25px;
+    grid-template-columns: 1fr 1fr;
+    gap: 20px 15px;
+  }
+
+  /* Giữ logo và icon cùng 1 hàng */
+  .footer-section:first-child {
+    flex-direction: row;
+    align-items: center;
+    justify-content: space-between;
+    flex-wrap: nowrap;
+    gap: 10px;
+  }
+
+  .footer-section:first-child .social-links {
+    margin-left: auto;
+    gap: 8px;
+  }
+
+  .social-link {
+    width: 32px;
+    height: 32px;
+  }
+
+  .social-link svg {
+    width: 16px;
+    height: 16px;
   }
 
   .footer-brand {
     font-size: 1.3rem;
+  }
+
+  .footer-title {
+    font-size: 0.95rem;
+  }
+
+  .footer-links a {
+    font-size: 0.85rem;
   }
 
   .footer-description {
@@ -155,6 +230,10 @@
   }
 
   .footer-bottom {
+    font-size: 0.85rem;
+  }
+
+  .footer-contact li {
     font-size: 0.85rem;
   }
 }

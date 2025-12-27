@@ -38,7 +38,6 @@ export async function loginApi(
         // Lưu userDto nhưng bỏ passwordHash
         const { passwordHash, ...safeUserDto } = response.userDto;
         localStorage.setItem("userDto", JSON.stringify(safeUserDto));
-        console.log("response userDto:", safeUserDto);
       }
     }
     store.dispatch(showToast({
