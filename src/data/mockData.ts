@@ -227,4 +227,5 @@ export const mockProducts: Product[] = [
   },
 ];
 
-export const USE_MOCK_DATA = process.env.NEXT_PUBLIC_USE_MOCK_DATA !== "false";
+// Đổi thành true để dùng mock data, false để dùng API thật
+export const USE_MOCK_DATA = process.env.NEXT_PUBLIC_USE_MOCK_DATA === "true";
