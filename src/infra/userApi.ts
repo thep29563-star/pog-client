@@ -29,6 +29,7 @@ export async function getUsersPaginated(
   pageSize: number
 ): Promise<PaginatedResponse<UserData>> {
   try {
+    // Thử gọi API thật
     const response = await fetcher(
       getApiUrl(`${API_ENDPOINTS.USER.GET_USER}?page=${page}&pageSize=${pageSize}`),
       { method: "GET" }
@@ -40,13 +41,16 @@ export async function getUsersPaginated(
       pageSize: response.pageSize,
     };
   } catch (error) {
+    // ❌ API lỗi → Dùng mock data
     console.warn("API không khả dụng, sử dụng mock data:", error);
-    // Mock phân trang
-    const start = (page - 1) * pageSize;
-    const end = start + pageSize;
+
+    // Tính toán phân trang cho mock data
+    const start = (page - 1) * pageSize; // page=1 → start=0
+    const end = start + pageSize; // page=1 → end=4
+
     return {
-      data: mockUsers.slice(start, end),
-      total: mockUsers.length,
+      data: mockUsers.slice(start, end), // Lấy 4 items từ mock
+      total: mockUsers.length, // Tổng số mock users (16)
       page: page,
       pageSize: pageSize,
     };
