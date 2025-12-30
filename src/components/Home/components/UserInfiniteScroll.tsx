@@ -66,6 +66,12 @@ export default function UserInfiniteScroll() {
       hasMore={hasMore}
       loader={<h4>Đang tải...</h4>}
       endMessage={<p>Đã hiển thị tất cả {total} người dùng</p>}
+      // scrollThreshold - khi nào trigger load thêm:
+      // 1 = chạm cuối mới load (mặc định)
+      // 0.8 = còn 20% là load
+      // 0.5 = scroll được 50% là load
+      // "200px" = còn cách cuối 200px là load
+      scrollThreshold={0.8}
     >
       <div className="user-grid">
         {users.map((user) => (
