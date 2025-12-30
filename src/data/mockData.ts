@@ -184,6 +184,54 @@ export const mockUsers: UserData[] = [
     email: "buithih@gmail.com",
     description: "QA Engineer với kỹ năng automation testing",
   },
+  {
+    id: "9",
+    userName: "Nguyễn Văn I",
+    email: "nguyenvani@gmail.com",
+    description: "Frontend Developer React/Vue",
+  },
+  {
+    id: "10",
+    userName: "Trần Thị K",
+    email: "tranthik@gmail.com",
+    description: "Scrum Master với chứng chỉ PSM",
+  },
+  {
+    id: "11",
+    userName: "Lê Văn L",
+    email: "levanl@gmail.com",
+    description: "System Architect 10 năm kinh nghiệm",
+  },
+  {
+    id: "12",
+    userName: "Phạm Thị M",
+    email: "phamthim@gmail.com",
+    description: "Product Owner sản phẩm công nghệ",
+  },
+  {
+    id: "13",
+    userName: "Hoàng Văn N",
+    email: "hoangvann@gmail.com",
+    description: "Security Engineer chuyên về pentesting",
+  },
+  {
+    id: "14",
+    userName: "Đỗ Thị O",
+    email: "dothio@gmail.com",
+    description: "Technical Writer tài liệu API",
+  },
+  {
+    id: "15",
+    userName: "Vũ Văn P",
+    email: "vuvanp@gmail.com",
+    description: "Machine Learning Engineer",
+  },
+  {
+    id: "16",
+    userName: "Bùi Thị Q",
+    email: "buithiq@gmail.com",
+    description: "Database Administrator MySQL/PostgreSQL",
+  },
 ];
 
 // Fake data cho products (nếu cần sau này)

@@ -11,6 +11,7 @@ import CardUser, { UserData } from "./components/CardUser";
 import { Section } from "./components/Section";
 import { AboutUs } from "./components/AboutUs";
 import { CTASection } from "./components/CTASection";
+import UserInfiniteScroll from "./components/UserInfiniteScroll";
 
 export const HomeClient = ({ userData }: { userData: UserData[] }) => {
   const [isDragging, setIsDragging] = useState(false);
@@ -129,7 +130,28 @@ export const HomeClient = ({ userData }: { userData: UserData[] }) => {
           </div>
         </div>
       </section>
-
+      <section className="products-section" id="user-list">
+        <div className="container">
+          <div className="selling-section-header">
+            <h2 className="selling-section-title">Danh sách người dùng</h2>
+            <Link href="/danh-sach-san-pham" className="view-all-link">
+              <span className="view-all-text">Xem tất cả</span>
+              <svg
+                className="arrow-icon"
+                width="20"
+                height="20"
+                viewBox="0 0 24 24"
+                fill="none"
+                stroke="currentColor"
+                strokeWidth="2"
+              >
+                <path d="M5 12h14M12 5l7 7-7 7" />
+              </svg>
+            </Link>
+          </div>
+          <UserInfiniteScroll />
+        </div>
+      </section>
       {/* CTA Section */}
       <CTASection />
     </div>
